@@ -34,7 +34,7 @@ const Navbar = () => {
                     </NavLink>
 
                     <NavLink
-                        to="/added-items"
+                        to="/addedItems"
                         className={({ isActive }) => (isActive ? "active" : "")}
                         onClick={closeMenu}
                     >

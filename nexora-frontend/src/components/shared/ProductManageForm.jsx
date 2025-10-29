@@ -4,7 +4,7 @@ import useAxios from "../../hooks/useAxios";
 
 const ProductManageForm = ({ product = {}, action }) => {
 
-    const { name, image, category, price, qty, description, _id } = product;
+    const { name, image, category, price, description, _id } = product;
     const actionStatus = action === "add" ? "Add" : "Update"
 
     const axiosInstance = useAxios();
@@ -16,11 +16,10 @@ const ProductManageForm = ({ product = {}, action }) => {
         const form = e.target;
         const name = form.name.value;
         const price = form.price.value;
-        const qty = form.qty.value;
         const image = form.image.value;
         const category = form.category.value;
         const description = form.description.value;
-        const productInfo = { name, price, qty, image, category, description };
+        const productInfo = { name, price, image, category, description };
 
         // Show SweetAlert confirmation
         const result = await Swal.fire({
@@ -38,7 +37,7 @@ const ProductManageForm = ({ product = {}, action }) => {
 
             // post product 
             if (action === "add") {
-                axiosInstance.post("/api/cart", productInfo)
+                axiosInstance.post("/api/products", productInfo)
                     .then(res => {
                         if (res.data?.data?.insertedId) {
                             Swal.fire({
@@ -60,7 +59,7 @@ const ProductManageForm = ({ product = {}, action }) => {
             } 
             // Update product
             else if (action === "edit") {
-                axiosInstance.patch(`/api/cart/${_id}`, {productInfo})
+                axiosInstance.patch(`/api/products/${_id}`, {productInfo})
                     .then(res => {
                         if (res.data?.result?.modifiedCount) {
                             Swal.fire({
@@ -125,18 +124,6 @@ const ProductManageForm = ({ product = {}, action }) => {
                         defaultValue={description ? description : ""}
                         placeholder="Write a short description"
                     ></textarea>
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="quantity">Product Quantity</label>
-                    <input
-                        type="number"
-                        id="quantity"
-                        name="qty"
-                        required
-                        defaultValue={qty ? qty : ""}
-                        placeholder="Enter product quantity"
-                    />
                 </div>
 
                 <div className="form-group">

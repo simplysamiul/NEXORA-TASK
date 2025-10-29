@@ -4,6 +4,7 @@ import Home from "../pages/Home/Home";
 import AddProduct from "../pages/AddProduct/AddProduct";
 import ManageProductList from "../pages/ManageProductList/ManageProductList";
 import EditProduct from "../pages/EditProduct.jsx/EditProduct";
+import AddedItems from "../pages/AddedItems/AddedItems";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
             {
                 path: "editProduct/:productId",
                 Component: EditProduct
+            },
+            {
+                path: "addedItems",
+                Component: AddedItems
             },
         ]
     }

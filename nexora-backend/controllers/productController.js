@@ -59,4 +59,17 @@ const addProduct = async (req, res) => {
   }
 };
 
-module.exports = { getAllProducts, addProduct, getSingleProduct, updateSingleProduct };
+// Delete product by product Id
+const deleteSingleProduct = async(req,res) => {
+  try {
+    const db = getDB();
+    const productId = req.params.id;
+    const query = {_id: new ObjectId(productId)};
+    const result = await db.collection("productList").deleteOne(query);
+    res.status(200).json({ success: true, message: "Product deleted successfully", result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Product deletation faild." });
+  }
+}
+
+module.exports = { getAllProducts, addProduct, getSingleProduct, updateSingleProduct, deleteSingleProduct };

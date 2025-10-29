@@ -3,7 +3,7 @@ import ProductManageForm from "../../components/shared/ProductManageForm";
 
 const AddProduct = () => {
   return (
-    <ProductManageForm />
+    <ProductManageForm action="add" />
   );
 };
 

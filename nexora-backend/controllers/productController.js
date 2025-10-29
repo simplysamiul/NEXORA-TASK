@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const { getDB } = require("../config/db");
 
 
@@ -8,22 +9,45 @@ const getAllProducts = async (req, res) => {
     const products = await db.collection("productList").find().toArray();
     res.status(200).json(products);
   } catch (error) {
-    console.error("Error fetching products:", error);
     res.status(500).json({ success: false, message: "Failed to load products" });
   }
 };
 
+// get specific product through to the productId
+const getSingleProduct = async (req, res) => {
+  try {
+    const db = getDB();
+    const productId = req.params.id;
+    const query = { _id: new ObjectId(productId) };
+    const product = await db.collection("productList").findOne(query);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to load product" });
+  }
+};
 
-// post products
+
+// Update a product through to the productId
+const updateSingleProduct = async (req, res) => {
+  try {
+    const db = getDB();
+    const updatedInfo = req.body.productInfo;
+    const productId = req.params.id;
+    const filter = { _id: new ObjectId(productId) };
+    const options = { upsert: true };
+    const result = await db.collection("productList").updateOne(filter, {$set : updatedInfo}, options);
+    res.status(200).json({ success: true, message: "Product updated successfully", result });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update product" });
+  }
+}
+
+
+// post a products
 const addProduct = async (req, res) => {
   try {
     const db = getDB();
     const productInfo = req.body;
-
-    if (!productInfo) {
-      return res.status(400).json({ success: false, message: "Invalid product info" });
-    }
-
     const result = await db.collection("productList").insertOne(productInfo);
     res.status(201).json({
       success: true,
@@ -31,9 +55,8 @@ const addProduct = async (req, res) => {
       data: result,
     });
   } catch (error) {
-    console.error("Error adding product:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
-module.exports = { getAllProducts, addProduct };
+module.exports = { getAllProducts, addProduct, getSingleProduct, updateSingleProduct };

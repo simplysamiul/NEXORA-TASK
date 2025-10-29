@@ -2,8 +2,10 @@ import Swal from "sweetalert2";
 import "../../css/ProductManageForm.css";
 import useAxios from "../../hooks/useAxios";
 
-const ProductManageForm = () => {
+const ProductManageForm = ({ product = {}, action }) => {
 
+    const { name, image, category, price, qty, description, _id } = product;
+    const actionStatus = action === "add" ? "Add" : "Update"
 
     const axiosInstance = useAxios();
 
@@ -17,46 +19,75 @@ const ProductManageForm = () => {
         const qty = form.qty.value;
         const image = form.image.value;
         const category = form.category.value;
-        const productInfo = { name, price, qty, image, category }
+        const description = form.description.value;
+        const productInfo = { name, price, qty, image, category, description };
 
         // Show SweetAlert confirmation
         const result = await Swal.fire({
-            title: "Add this product?",
-            text: "Please confirm before sending it to the database.",
+            title: `${actionStatus} this product?`,
+            text: `Please confirm before ${actionStatus.toLowerCase()} the product.`,
             icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#00bcd4",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, Add it!",
+            confirmButtonText: `Yes, ${actionStatus} it!`,
         });
 
         if (result.isConfirmed) {
-            // post product
-            axiosInstance.post("/api/cart", productInfo)
-                .then(res => {
-                    if (res.data?.data?.insertedId) {
+
+
+            // post product 
+            if (action === "add") {
+                axiosInstance.post("/api/cart", productInfo)
+                    .then(res => {
+                        if (res.data?.data?.insertedId) {
+                            Swal.fire({
+                                title: "Added!",
+                                text: `${res.data.message}`,
+                                icon: "success",
+                                confirmButtonColor: "#00bcd4",
+                            });
+                            // clear form send data to the database
+                            form.reset();
+                        }
+                    }).catch(err => {
                         Swal.fire({
-                            title: "Added!",
-                            text: `${res.data.message}`,
-                            icon: "success",
-                            confirmButtonColor: "#00bcd4",
+                            title: "Error!",
+                            text: `${err.message}`,
+                            icon: "error",
                         });
-                        // clear form send data to the database
-                        form.reset();
-                    }
-                }).catch(err => {
-                    Swal.fire({
-                        title: "Error!",
-                        text: `${err.message}`,
-                        icon: "error",
-                    });
-                })
+                    })
+            } 
+            // Update product
+            else if (action === "edit") {
+                axiosInstance.patch(`/api/cart/${_id}`, {productInfo})
+                    .then(res => {
+                        if (res.data?.result?.modifiedCount) {
+                            Swal.fire({
+                                title: "Update!",
+                                text: `${res.data.message}`,
+                                icon: "success",
+                                confirmButtonColor: "#00bcd4",
+                            });
+                            // clear form send data to the database
+                            form.reset();
+                        }
+                    }).catch(err => {
+                        Swal.fire({
+                            title: "Error!",
+                            text: `${err.message}`,
+                            icon: "error",
+                        });
+                    })
+            }
+
+
         }
     };
 
     return (
         <div className="add-product-container">
-            <h2 className="form-title">Add New Product</h2>
+            <h2 className="form-title">{actionStatus} New Product</h2>
 
             <form className="product-form" onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -66,6 +97,7 @@ const ProductManageForm = () => {
                         id="name"
                         name="name"
                         required
+                        defaultValue={name ? name : ""}
                         placeholder="Enter product title"
                     />
                 </div>
@@ -79,6 +111,7 @@ const ProductManageForm = () => {
                         step="0.01"
                         min="0"
                         required
+                        defaultValue={price ? price : ""}
                         placeholder="Enter product price"
                     />
                 </div>
@@ -89,6 +122,7 @@ const ProductManageForm = () => {
                         id="description"
                         name="description"
                         required
+                        defaultValue={description ? description : ""}
                         placeholder="Write a short description"
                     ></textarea>
                 </div>
@@ -100,6 +134,7 @@ const ProductManageForm = () => {
                         id="quantity"
                         name="qty"
                         required
+                        defaultValue={qty ? qty : ""}
                         placeholder="Enter product quantity"
                     />
                 </div>
@@ -111,6 +146,7 @@ const ProductManageForm = () => {
                         id="image"
                         name="image"
                         required
+                        defaultValue={image ? image : ""}
                         placeholder="Enter product image link"
                     />
                 </div>
@@ -122,6 +158,7 @@ const ProductManageForm = () => {
                         id="category"
                         name="category"
                         required
+                        defaultValue={category ? category : ""}
                         placeholder="Enter product category"
                     />
                 </div>

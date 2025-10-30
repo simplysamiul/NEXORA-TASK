@@ -3,6 +3,9 @@
 A **full-stack shopping cart web application** built with React, Node.js, and MongoDB.  
 It allows users to browse products, add them to the cart, manage their cart items, and place mock orders with checkout functionality.
 
+Live Link : https://nexora-task-4c629.web.app
+Backend link: https://nexora-backend-ten.vercel.app/
+
 ---
 
 ## 🚀 Tech Stack

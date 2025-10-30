@@ -35,7 +35,7 @@ const updateSingleProduct = async (req, res) => {
     const productId = req.params.id;
     const filter = { _id: new ObjectId(productId) };
     const options = { upsert: true };
-    const result = await db.collection("productList").updateOne(filter, {$set : updatedInfo}, options);
+    const result = await db.collection("productList").updateOne(filter, { $set: updatedInfo }, options);
     res.status(200).json({ success: true, message: "Product updated successfully", result });
   } catch (error) {
     res.status(500).json({ message: "Failed to update product" });
@@ -59,12 +59,29 @@ const addProduct = async (req, res) => {
   }
 };
 
+
+// Place order
+const placeOrder = async (req, res) => {
+  try {
+    const db = getDB();
+    const orderInfo = req.body.order;
+    const result = await db.collection("ordersList").insertOne(orderInfo);
+    res.status(201).json({
+      success: true,
+      message: "Order Placed successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Order placed Faild." });
+  }
+}
+
 // Delete product by product Id
-const deleteSingleProduct = async(req,res) => {
+const deleteSingleProduct = async (req, res) => {
   try {
     const db = getDB();
     const productId = req.params.id;
-    const query = {_id: new ObjectId(productId)};
+    const query = { _id: new ObjectId(productId) };
     const result = await db.collection("productList").deleteOne(query);
     res.status(200).json({ success: true, message: "Product deleted successfully", result });
   } catch (error) {
@@ -72,4 +89,8 @@ const deleteSingleProduct = async(req,res) => {
   }
 }
 
-module.exports = { getAllProducts, addProduct, getSingleProduct, updateSingleProduct, deleteSingleProduct };
+
+
+
+
+module.exports = { getAllProducts, addProduct, getSingleProduct, updateSingleProduct, deleteSingleProduct, placeOrder };

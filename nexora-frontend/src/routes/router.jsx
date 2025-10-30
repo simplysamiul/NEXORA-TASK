@@ -5,6 +5,7 @@ import AddProduct from "../pages/AddProduct/AddProduct";
 import ManageProductList from "../pages/ManageProductList/ManageProductList";
 import EditProduct from "../pages/EditProduct.jsx/EditProduct";
 import AddedItems from "../pages/AddedItems/AddedItems";
+import CheckOut from "../pages/CheckOut/CheckOut";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
             {
                 path: "addedItems",
                 Component: AddedItems
+            },
+            {
+                path: "checkOut",
+                Component:CheckOut
             },
         ]
     }

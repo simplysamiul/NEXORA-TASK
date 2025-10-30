@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CartContext } from './CartContext';
+import Swal from 'sweetalert2';
 
 const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
@@ -19,25 +20,47 @@ const CartProvider = ({ children }) => {
         if (initialized) {
             localStorage.setItem("cart", JSON.stringify(cart));
         }
-    }, [initialized,cart]);
+    }, [initialized, cart]);
 
     // add to cart
     const addToCart = (product) => {
         setCart((prevCart) => {
-            const existingCart = prevCart.find(cart => cart._id === product._id);
+            const existingProduct = prevCart.find(item => item._id === product._id);
             let updatedCart;
-            if (existingCart) {
+
+            if (existingProduct) {
                 // increase qty if product exists
-                updatedCart = prevCart.map(cart => cart._id === product._id ? { ...cart, qty: cart.qty + 1 } : cart)
+                updatedCart = prevCart.map(item =>
+                    item._id === product._id
+                        ? { ...item, qty: item.qty + 1 }
+                        : item
+                );
+
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Quantity Updated',
+                    text: `${product.name} quantity increased.`,
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
             } else {
                 // add new product
-                updatedCart = [...prevCart, { ...product, qty: 1 }]
+                updatedCart = [...prevCart, { ...product, qty: 1 }];
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Added to Cart!',
+                    text: `${product.name} added successfully.`,
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
             }
 
             calculateTotal(updatedCart);
             return updatedCart;
-        })
+        });
     };
+
 
     // Update quantity
     const updateQty = (id, qty) => {
@@ -59,11 +82,11 @@ const CartProvider = ({ children }) => {
 
     // Calculate price
     const calculateTotal = (cartItems) => {
-        const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+        const totalPrice = cartItems.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
         setTotal(totalPrice);
     };
 
-    const cartAction = { addToCart, cart, removeFromCart, total, updateQty };
+    const cartAction = { addToCart, cart, removeFromCart, total, updateQty, setCart, setTotal };
     return (
         <CartContext.Provider value={cartAction}>
             {children}

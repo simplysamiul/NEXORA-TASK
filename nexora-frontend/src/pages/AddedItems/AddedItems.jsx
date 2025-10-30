@@ -2,10 +2,10 @@ import useCart from "../../hooks/useCart";
 import "../../css/AddedItem.css";
 import ProductNotFound from "../../components/shared/ProductNotFound";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const AddedItem = () => {
     const { cart, removeFromCart, updateQty, total } = useCart();
-
     // handle remove item
     const handleRemoveItem = (id) => {
         Swal.fire({
@@ -65,7 +65,7 @@ const AddedItem = () => {
 
                     <div className="cart-summary">
                         <h3>Total: ${total.toFixed(2)}</h3>
-                        <button className="checkout-btn">Proceed to Checkout</button>
+                        <Link to="/checkOut"><button className="checkout-btn">Proceed to Checkout</button></Link>
                     </div>
                 </>
             )}

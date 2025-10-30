@@ -15,7 +15,7 @@ let db;
 
 async function connectDB() {
   try {
-    await client.connect();
+    // await client.connect();
     db = client.db("nexoraDB");
     console.log("MongoDB connected successfully");
   } catch (error) {
@@ -28,5 +28,6 @@ function getDB() {
   if (!db) throw new Error("Database not connected yet!");
   return db;
 }
+
 
 module.exports = { connectDB, getDB };

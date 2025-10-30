@@ -1,16 +1,67 @@
-# React + Vite
+# 🛒 Mock E-Commerce Cart Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **full-stack shopping cart web application** built with React, Node.js, and MongoDB.  
+It allows users to browse products, add them to the cart, manage their cart items, and place mock orders with checkout functionality.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tech Stack
 
-## React Compiler
+### Frontend
+-  React.js  
+-  React Context API (for global state management)  
+-  Custom Hooks  
+-  Custom CSS for styling  
+-  SweetAlert2 for alerts and confirmation popups  
+-  Axios for API communication  
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Backend
+-  Node.js  
+-  Express.js  
+-  MongoDB (with Mongoose)  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🌟 Features
+
+### Product Management
+- ✅ Add new products (with image, name, price, and category)
+- ✅ View all products on the homepage in a responsive grid layout
+- ✅ Edit or delete products directly from the product management page
+
+### 🛍️ Cart System
+-  Uses React Context API for global cart management
+-  Persists cart data in **localStorage**
+-  "Add to Cart" button adds product to the cart or increases quantity if already added
+-  Quantity increase/decrease buttons
+-  Remove product with SweetAlert confirmation popup
+-  Auto calculation of total price (based on product quantity and price)
+
+### 💳 Checkout System
+  - Checkout page shows:
+  - Total items
+  - VAT
+  - Delivery charge
+  - Grand total
+  - User can fill out shipping details (name, email, address)
+  -  After order confirmation:
+  - Data is sent to the database
+  - Cart is cleared from localStorage
+  - Redirects user to home page
+  - SweetAlert success popup shows confirmation
+
+---
+
+## 🧭 Application Workflow
+
+```mermaid
+graph TD
+A[Uploads Product/Manage Product] --> B[Products Display on Home Page]
+B --> C[User Clicks 'Add to Cart']
+C --> D[Data Stored in Context and LocalStorage]
+D --> E[User Views Cart in Added Items]
+E --> F[Change Quantity or Remove Items - Confirm Popup]
+F --> G[Proceed to Checkout]
+G --> H[Fill Name, Email, Address]
+H --> I[Confirm Order and Save to Database]
+I --> J[Cart Cleared, Redirect to Home, Show Success Popup]

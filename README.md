@@ -56,7 +56,7 @@ It allows users to browse products, add them to the cart, manage their cart item
 
 ```mermaid
 graph TD
-A[Admin Uploads Product] --> B[Products Display on Home Page]
+A[Uploads Product/Manage Product] --> B[Products Display on Home Page]
 B --> C[User Clicks 'Add to Cart']
 C --> D[Data Stored in Context and LocalStorage]
 D --> E[User Views Cart in Added Items]
